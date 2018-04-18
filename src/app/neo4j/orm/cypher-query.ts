@@ -13,6 +13,7 @@ export class CypherQuery
     querySetPropsClauses: Array<string> = [];
     queryReturnClauses: Array<string> = [];
     queryRemovePropsClauses: Array<string> = [];
+    queryDeleteClauses: Array<string> = [];
 
     queryLimit: number = null;
     querySkip: number = null;
@@ -39,7 +40,6 @@ export class CypherQuery
         this.queryParts = [];
         this.queryCreateClauses = [];
         this.queryWhereClauses = [];
-        this.querySetPropsClauses = [];
         this.queryReturnClauses = [];
         this.queryRemovePropsClauses = [];
         this.querySetLabelsClause = null;
@@ -87,6 +87,12 @@ export class CypherQuery
         return this;
     }
 
+    delete(clause: string)
+    {
+        this.queryDeleteClauses.push(clause)
+        return this;
+    }
+
     skip(skip: number)
     {
         this.querySkip = skip
@@ -117,6 +123,7 @@ export class CypherQuery
         this.addQueryParts(null, this.queryNativeParts)
 
         this.addQueryParts('RETURN', this.queryReturnClauses)
+        this.addQueryParts('DELETE', this.queryDeleteClauses)
 
         if (null !== this.querySkip) {
             this.queryParts.push(`SKIP ${this.querySkip}`)

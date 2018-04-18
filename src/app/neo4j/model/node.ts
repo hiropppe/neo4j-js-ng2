@@ -14,6 +14,7 @@ export class Node implements NodeInterface
     x?: number;
     y?: number;
     fixed?: boolean;
+    deleted?: boolean;
 
     constructor(data: any = null)
     {
@@ -166,6 +167,12 @@ export class Node implements NodeInterface
     setFixed(fixed: boolean)
     {
         this.fixed = fixed;
+        return this;
+    }
+
+    setDeleted(fixed: boolean)
+    {
+        this.deleted = fixed;
         return this;
     }
 

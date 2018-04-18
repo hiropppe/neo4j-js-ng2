@@ -5,6 +5,7 @@ export interface NodeInterface {
     TYPE?: string;
     props: any;
     fixed?: boolean;
+    deleted?: boolean;
     x?: number;
     y?: number;
     hydrate(data: any, allowReplace: boolean): void;
@@ -28,6 +29,7 @@ export interface NodeInterface {
     [prop: string]: any;
 
     setFixed(fixed: boolean): any;
+    setDeleted(fixed: boolean): any;
     setCoords(coords: [number, number]): any;
     getCoords(): any
 }

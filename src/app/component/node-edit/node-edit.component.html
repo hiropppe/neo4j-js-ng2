@@ -40,5 +40,6 @@
 
 <div  *ngIf="(null !== node)" flex flex-rows class="charcoal" flex-space-between>
     <app-button (click)="save($event)" [loading]="loading" primary>Save</app-button>
+    <app-button (click)="delete($event)" [loading]="loading">Delete</app-button>
     <app-button (click)="cancel($event)" danger [disabled]="(!cancelable)">Reset</app-button>
 </div>

@@ -126,6 +126,24 @@ export class NodeEditComponent
         })
     }
 
+    delete(e?: any)
+    {
+        if (e) { e.preventDefault() }
+    
+        this.loading = true
+        this.cancelable = false
+
+        this.repo.deleteNode(this.node.getId()).catch(err => {
+            this.loading = false
+            console.log(err)
+            this.onNodeEdited.emit(null)
+        })
+
+        this.loading = false
+        this.node.setDeleted(true)
+        this.onNodeEdited.emit(this.node)
+    }
+
     addProperty(e: any)
     {
         e.preventDefault()

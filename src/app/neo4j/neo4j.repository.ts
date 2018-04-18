@@ -75,6 +75,22 @@ export class Neo4jRepository
         })
     }
 
+    deleteNode(id: number): Promise<Array<ResultSet>>
+    {
+        const builder = new CypherQuery()
+
+        const query = builder
+            .matches('n')
+            .andWhere('n', 'ID(?)', id)
+            .delete('n')
+            .getQuery();
+
+        const transaction = new Transaction()
+        transaction.add(query)
+
+        return this.neo4j.commit(transaction)
+    }
+
     updateNodeById(id: number, changedProperties: any, removedProperties: any, labels: Array<string> = null, removedLabels: Array<string> = null): Promise<Array<ResultSet>>
     {
         const builder = new CypherQuery()
