@@ -171,9 +171,15 @@ export class HomePageComponent implements OnInit, AfterViewInit
             this.saveSuccessText = null;
             this.saveErrorText = 'An error occured';
         } else {
-            this.graph.updateNode(node)
             this.saveSuccessText = null;
-            this.saveSuccessText = 'Node saved';
+            if (node.deleted == true) {
+                this.graph.removeNode(node)
+                this.saveSuccessText = 'Node deleted';
+                this.selectedNode = null;
+            } else {
+                this.graph.updateNode(node)
+                this.saveSuccessText = 'Node saved';
+            }
         }
     }
 
