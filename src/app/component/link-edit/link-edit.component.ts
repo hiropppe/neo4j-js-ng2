@@ -125,6 +125,23 @@ export class LinkEditComponent implements OnInit, AfterViewInit, OnChanges
         })
     }
 
+    delete(e?: any)
+    {
+        if (e) { e.preventDefault() }
+
+        this.loading = true
+        this.cancelable = false
+
+        this.repo.deleteRelationship(this.link.getId()).catch(err => {
+            this.loading = false
+            console.log(err)
+        })
+
+        this.loading = false
+        this.link.setDeleted(true)
+        this.onLinkEdited.emit({ currentValue: this.link, previousValue: this.link })
+    }
+
     addProperty(e: any)
     {
         e.preventDefault();

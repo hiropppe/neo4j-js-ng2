@@ -193,7 +193,6 @@ export class Neo4jRepository
 
     }
 
-
     updateRelationshipById(id: number, type: string|String, changedType: string|String = null, changedProperties: any, removedProperties: any)
     {
         const transaction01 = new Transaction()
@@ -236,6 +235,13 @@ export class Neo4jRepository
 
             return this.neo4j.commit(transaction);
         })
+    }
+
+    deleteRelationship(id: number)
+    {
+        const transaction = new Transaction()
+        transaction.add(`MATCH (a)-[r]->(b) WHERE ID(r) = ${id} DELETE r`)
+        return this.neo4j.commit(transaction)
     }
 
     execute(queryString: string)

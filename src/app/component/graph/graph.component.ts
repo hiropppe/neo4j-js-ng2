@@ -446,6 +446,12 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges
         this.update()
     }
 
+    removeLink(link: NodeInterface)
+    {
+        this.removeLinkById(link.getId(), this.DONT_UPDATE)
+        this.update()
+    }
+
     removeAllNodes()
     {
 

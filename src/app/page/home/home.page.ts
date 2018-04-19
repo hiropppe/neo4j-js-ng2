@@ -192,8 +192,14 @@ export class HomePageComponent implements OnInit, AfterViewInit
             //then an error occured
             this.toastError('An error occured')
         } else {
-            this.graph.updateLink(e.currentValue, e.previousValue)
-            this.toastSuccess('Relationship saved')
+            if (e.currentValue.deleted == true) {
+                this.graph.removeLink(e.currentValue)
+                this.toastSuccess('Relationship deleted')
+                this.selectedLink = null
+            } else {
+                this.graph.updateLink(e.currentValue, e.previousValue)
+                this.toastSuccess('Relationship saved')
+            }
         }
     }
 
