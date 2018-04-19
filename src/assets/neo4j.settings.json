@@ -1,6 +1,6 @@
 {
     "client": {
-        "apiEndpoint": "http://192.168.88.84:7474/db/data",
+        "apiEndpoint": "http://192.168.88.84:27474/db/data",
         "authBasic": "Basic bmVvNGo6dGFrZTRq"
     },
     "hotkeys": {
@@ -9,32 +9,24 @@
     "graph": {
         "nodes": {
             "primaryKey": "ID",
-            "displayNameOptions": ["label", "id"],
+            "displayNameOptions": ["name", "label", "id"],
             "displayColorOptions": {
-                "Entity": "#11B7AD",
-                "Item": "#6DCE9E",
-                "Claim": "#343434",
-                "Commonsmedia": "#E8CB3B",
-                "ExternalId": "#11B7AD",
-                "GeoShape": "#1E6F98",
-                "GlobalCoordinate": "#ADFF2F",
-                "Math": "#9410A3",
-                "Monolingualtext": "#A0A0A0",
-                "Property": "#A0A0A0",
-                "Quantity": "#A0A0A0",
-                "String": "#A0A0A0",
-                "TabularData": "#A0A0A0",
-                "Time": "#A0A0A0",
-                "Url": "#A0A0A0"
+                "Ad": "#6DCE9E",
+                "Person": "#343434",
+                "Specialty": "#11b7ad",
+                "Client": "#6DCE9E",
+                "Company": "#1e6f98",
+                "Officer": "#e8cb3b",
+                "Test": "#11b7ad"
             }
         },
         "links": {
-            "displayNameOptions": ["by", "TYPE"],
+            "displayNameOptions": ["name", "TYPE"],
             "displayColorOptions": {
 
             }
         },
-        "labels": ["Entity", "Item"]
+        "labels": ["Test1", "Test2", "Document", "Officer", "Company"]
     },
     "debug": true
 }

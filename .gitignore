@@ -41,4 +41,4 @@ testem.log
 .DS_Store
 Thumbs.db
 
-#neo4j.settings.json
+neo4j.settings.json
