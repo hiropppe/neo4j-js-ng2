@@ -1,0 +1,40 @@
+{
+    "client": {
+        "apiEndpoint": "http://192.168.88.84:7474/db/data",
+        "authBasic": "Basic bmVvNGo6dGFrZTRq"
+    },
+    "hotkeys": {
+        "toggleCreateMode": ["CTRL", "x"]
+    },
+    "graph": {
+        "nodes": {
+            "primaryKey": "ID",
+            "displayNameOptions": ["label", "id"],
+            "displayColorOptions": {
+                "Entity": "#11B7AD",
+                "Item": "#6DCE9E",
+                "Claim": "#343434",
+                "Commonsmedia": "#E8CB3B",
+                "ExternalId": "#11B7AD",
+                "GeoShape": "#1E6F98",
+                "GlobalCoordinate": "#ADFF2F",
+                "Math": "#9410A3",
+                "Monolingualtext": "#A0A0A0",
+                "Property": "#A0A0A0",
+                "Quantity": "#A0A0A0",
+                "String": "#A0A0A0",
+                "TabularData": "#A0A0A0",
+                "Time": "#A0A0A0",
+                "Url": "#A0A0A0"
+            }
+        },
+        "links": {
+            "displayNameOptions": ["by", "TYPE"],
+            "displayColorOptions": {
+
+            }
+        },
+        "labels": ["Entity", "Item"]
+    },
+    "debug": true
+}
