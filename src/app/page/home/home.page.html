@@ -31,7 +31,7 @@
             </div>
 
             <node-edit
-                *ngIf="(null !== selectedNode)"
+                *ngIf="(null !== selectedNode && false == expandLinks)"
                 [node]="selectedNode"
                 (onNodeEdited)="onNodeEdited($event)">
             </node-edit>
@@ -40,6 +40,11 @@
                 [link]="selectedLink"
                 (onLinkEdited)="onLinkEdited($event)">
             </link-edit>
+            <link-select
+                *ngIf="(null !== selectedNode && true == expandLinks)"
+                [node]="selectedNode"
+                (onNodeEdited)="onNodeEdited($event)">
+            </link-select>
         </div>
 
     </div>
@@ -50,13 +55,12 @@
             <search-component [mode]="'normal'" [loading]="searchLoading" (onSearch)="onSearch($event)"></search-component>
         </div>
         <div flex flex-fill class="charcoal">
-
             <graph-component
                 [createMode]="createModeEnabled"
                 (nodeCreated)="onNodeCreated($event)"
                 (nodeSelected)="onNodeSelected($event)"
                 (linkSelected)="onLinkSelected($event)"
-                (nodeDoubleClicked)="onNodeDoubleClicked($event)"
+                (nodeDoubleClicked)="onNodeDoubleClicked2($event)"
                 (nodeAdded)="onNodeAdded($event)"
                 (relationshipCreate)="onLinkCreated($event)"
             ></graph-component>

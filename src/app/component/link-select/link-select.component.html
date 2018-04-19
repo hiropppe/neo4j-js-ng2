@@ -1,0 +1,20 @@
+<div flex flex-fill *ngIf="(null !== node)">
+    <div flex flex-columns>
+        <div flex flex-rows class="emarged-bottom">
+            <span flex class="gray">Relationships</span>
+        </div>
+        <angular2-multiselect [data]="links" 
+            [(ngModel)]="selectedLinks" 
+            [settings]="settings" 
+            (onSelect)="onItemSelect($event)"
+            (onDeSelect)="OnItemDeSelect($event)" 
+            (onSelectAll)="onSelectAll($event)" 
+            (onDeSelectAll)="onDeSelectAll($event)">
+        </angular2-multiselect>
+    </div>
+</div>
+
+<div *ngIf="(null !== node)" flex flex-rows class="charcoal" flex-space-between>
+    <app-button (click)="expand($event)" [loading]="loading" primary>Expand</app-button>
+    <app-button (click)="cancel($event)" danger [disabled]="(!cancelable)">Cancel</app-button>
+</div>

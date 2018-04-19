@@ -144,7 +144,7 @@ export class Neo4jRepository
             })
         })
     }
-
+    
     findRelationships(node: NodeInterface, direction: '->'|'<-' = '->')
     {
         let match: string;
@@ -180,7 +180,6 @@ export class Neo4jRepository
 
                     // direction always stays the same
                     links.push(new Link({ source: sourceNode, target: targetNode, relationship: dataset2[i] }))
-
                 })
 
                 resolve(links)

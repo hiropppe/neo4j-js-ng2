@@ -32,6 +32,9 @@ import { NodeEditComponent }            from './component';
 import { LinkEditComponent }            from './component';
 import { MultiSelectComponent }         from './component';
 import { MultiSelectOptionComponent }   from './component';
+import { LinkSelectComponent }          from './component';
+
+import { AngularMultiSelectModule }     from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 
 
 @NgModule({
@@ -52,6 +55,7 @@ import { MultiSelectOptionComponent }   from './component';
         GraphComponent,
         NodeEditComponent,
         LinkEditComponent,
+        LinkSelectComponent,
 
         HomePageComponent,
         DebugPageComponent,
@@ -65,7 +69,8 @@ import { MultiSelectOptionComponent }   from './component';
         BrowserModule,
         HttpModule,
         FormsModule,
-        AppRoutingModule
+        AppRoutingModule,
+        AngularMultiSelectModule
     ],
     providers: [
         {

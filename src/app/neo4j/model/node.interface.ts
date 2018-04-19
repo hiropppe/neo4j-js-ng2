@@ -1,9 +1,12 @@
+import { LinkInterface } from '.';
+
 export interface NodeInterface {
     ID: number;
     LABELS: Array<string>;
     META: any;
     TYPE?: string;
     props: any;
+    links: Array<any>;
     fixed?: boolean;
     deleted?: boolean;
     x?: number;
@@ -32,4 +35,8 @@ export interface NodeInterface {
     setDeleted(fixed: boolean): any;
     setCoords(coords: [number, number]): any;
     getCoords(): any
+
+    getLinks(): Array<any>;
+    addLink(link: any): any;
+    removeLink(link: any): any;
 }

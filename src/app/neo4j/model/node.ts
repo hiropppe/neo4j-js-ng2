@@ -1,4 +1,5 @@
 import { NodeInterface } from './node.interface';
+import { LinkInterface } from '.';
 
 const reserved = [
     'ID', 'LABELS', 'META', 'TYPE'
@@ -11,6 +12,7 @@ export class Node implements NodeInterface
     META: any;
     TYPE?: string;
     props: any = {};
+    links: Array<any> = [];
     x?: number;
     y?: number;
     fixed?: boolean;
@@ -186,5 +188,27 @@ export class Node implements NodeInterface
     getCoords()
     {
         return [this.x, this.y]
+    }
+
+    getLinks()
+    {
+        return this.links;
+    }
+
+    addLink(link: any)
+    {
+        this.links.push(link)
+        return this;
+    }
+
+    removeLink(link: any)
+    {
+        const index = this.links.indexOf(link);
+
+        if (this.links.indexOf(link) > -1) {
+            this.links.splice(index, 1);
+        }
+
+        return this;
     }
 }

@@ -20,6 +20,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
 {
     selectedNode: Node = null;
     selectedLink: Node = null;
+    expandLinks: boolean = false;
 
     createModeEnabled: boolean = false
     createModeDefaults: any = {
@@ -142,12 +143,13 @@ export class HomePageComponent implements OnInit, AfterViewInit
     {
         this.selectedLink = null
         this.selectedNode = node
+        this.expandLinks = false
     }
 
     onLinkSelected(g: any)
     {
         this.selectedNode = null;
-
+        this.expandLinks = false
         if (null !== g) {
             this.selectedLink = g.relationship;
         }
@@ -156,6 +158,17 @@ export class HomePageComponent implements OnInit, AfterViewInit
     onNodeDoubleClicked(node: NodeInterface)
     {
         this.findRelationships(node)
+    }
+
+    onNodeDoubleClicked2(node: NodeInterface)
+    {
+        this.getRelationships(node).then(() => {
+            this.selectedLink = null
+            this.selectedNode = node
+            this.expandLinks = true
+        }).catch(err => {
+            this.toastError(err)
+        })
     }
 
     onNodeAdded(node: NodeInterface)
@@ -221,6 +234,34 @@ export class HomePageComponent implements OnInit, AfterViewInit
         this.selectedNode = null;
         // then safely reset create mode variable
         this.createModeEnabled = e;
+    }
+
+    private getRelationships(sourceNode: NodeInterface)
+    {
+        return new Promise((resolve, reject) => {
+            // query relationships in both ways
+            this.repo.findRelationships(sourceNode, '->').then((links: Array<LinkInterface>) => {
+
+                links.forEach((link: LinkInterface, i) => {
+                    this.selectedNode.addLink([link.relationship.ID, link.relationship.TYPE])
+                })
+
+            }).catch(err => {
+                this.toastError(err)
+            })
+
+            this.repo.findRelationships(sourceNode, '<-').then((links: Array<LinkInterface>) => {
+
+                links.forEach((link: LinkInterface, i) => {
+                    this.selectedNode.addLink([link.relationship.ID, link.relationship.TYPE])
+                })
+
+            }).catch(err => {
+                this.toastError(err)
+            })
+
+            resolve(this.selectedNode)
+        })
     }
 
     private findRelationships(sourceNode: NodeInterface)

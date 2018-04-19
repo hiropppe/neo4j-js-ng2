@@ -9,3 +9,4 @@ export * from './multi-select/multi-select.component';
 export * from './multi-select/multi-select-option.component';
 export * from './node-edit/node-edit.component';
 export * from './link-edit/link-edit.component';
+export * from './link-select/link-select.component';
