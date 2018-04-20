@@ -218,10 +218,8 @@ export class Neo4jRepository
 
                 dataset3.forEach((node: NodeInterface) => {
                     this.execute(`MATCH (a)-[r]->() WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r)`).then((linkResultSet: Array<ResultSet>) => {
-                        console.log(linkResultSet)
                         let edges = linkResultSet[0].getDataset('r')
                         edges.forEach((edge: Node) => {
-                            console.log(edge)
                             node.links.push({'ID': edge.ID, 'TYPE': edge.TYPE})
                         })
                     })

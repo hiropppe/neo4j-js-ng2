@@ -486,6 +486,9 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges
     removeLinkById(id: number, update: boolean = true)
     {
         const index = Finder.in(this.links).indexOf(id)
+
+        if (null === index) { return }
+
         this.links.splice(index, 1)
 
         if (true === update) {
