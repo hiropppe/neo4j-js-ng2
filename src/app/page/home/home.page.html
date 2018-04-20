@@ -43,7 +43,7 @@
             <link-select
                 *ngIf="(null !== selectedNode && true == expandLinks)"
                 [node]="selectedNode"
-                (onNodeEdited)="onNodeEdited($event)">
+                (onLinkExpanded)="onLinkExpanded($event)">
             </link-select>
         </div>
 
@@ -60,7 +60,7 @@
                 (nodeCreated)="onNodeCreated($event)"
                 (nodeSelected)="onNodeSelected($event)"
                 (linkSelected)="onLinkSelected($event)"
-                (nodeDoubleClicked)="onNodeDoubleClicked2($event)"
+                (nodeDoubleClicked)="onNodeDoubleClicked($event)"
                 (nodeAdded)="onNodeAdded($event)"
                 (relationshipCreate)="onLinkCreated($event)"
             ></graph-component>

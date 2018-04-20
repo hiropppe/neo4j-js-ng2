@@ -16,7 +16,7 @@ import { diff }                                 from '../../core/array';
 export class LinkSelectComponent implements OnInit
 {
     @Input('node') node: NodeInterface = null;
-    @Output('onNodeEdited') onNodeEdited: EventEmitter<Node> = new EventEmitter()
+    @Output('onLinkExpanded') onLinkExpanded: EventEmitter<Node> = new EventEmitter()
 
     links = [];
     selectedLinks = [];
@@ -31,20 +31,6 @@ export class LinkSelectComponent implements OnInit
     }
 
     ngOnInit() {
-        this.node.links.forEach((link: any, i) => {
-            console.log(link[1])
-            this.links.push({'id': link[0], 'itemName': link[1]})
-        })
-        /*
-        this.links = [
-            { "id": 1, "itemName": "India" },
-            { "id": 2, "itemName": "Singapore" },
-            { "id": 3, "itemName": "Australia" },
-            { "id": 4, "itemName": "Canada" },
-            { "id": 5, "itemName": "South Korea" },
-            { "id": 6, "itemName": "Brazil" }
-        ];
-        */
         this.settings = {
             text: "Select Relationships",
             selectAllText: 'Select All',
@@ -53,27 +39,51 @@ export class LinkSelectComponent implements OnInit
         };
     }
 
+    ngOnChanges(changes: SimpleChanges)
+    {
+        this.links = []
+        this.selectedLinks = []
+        if (null !== changes.node.currentValue) {
+            // always copy node properties to properties for the view whenever its not null
+            // also update all labels (available and node labels)
+            changes.node.currentValue.links.forEach((link: any) => {
+                this.links.push({'id': link['ID'], 'itemName': link['TYPE']})
+            })
+            changes.node.currentValue.dispLinks.forEach((link: any) => {
+                this.selectedLinks.push({'id': link['ID'], 'itemName': link['TYPE']})
+            })
+        }
+    }
+
     onItemSelect(link: any) {
-        console.log(link);
-        console.log(this.links);
+
     }
 
     OnItemDeSelect(link: any) {
-        console.log(link);
-        console.log(this.selectedLinks);
+
     }
 
     onSelectAll(items: any) {
-        console.log(items);
+
     }
 
     onDeSelectAll(items: any) {
-        console.log(items);
+
+    }
+
+    addItem(link: any) {
+        this.links.push(link)
     }
 
     expand(e?: any)
     {
         if (e) { e.preventDefault() }
+
+        this.node.dispLinks = []
+        this.selectedLinks.forEach((link: any) => {
+            this.node.dispLinks.push({'ID': link['id'], 'TYPE': link['itemName']})
+        })
+        this.onLinkExpanded.emit(this.node)
     }
 
     cancel(e?: any)

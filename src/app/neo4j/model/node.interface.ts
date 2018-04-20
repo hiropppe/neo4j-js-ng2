@@ -7,6 +7,7 @@ export interface NodeInterface {
     TYPE?: string;
     props: any;
     links: Array<any>;
+    dispLinks: Array<any>;
     fixed?: boolean;
     deleted?: boolean;
     x?: number;
@@ -35,8 +36,4 @@ export interface NodeInterface {
     setDeleted(fixed: boolean): any;
     setCoords(coords: [number, number]): any;
     getCoords(): any
-
-    getLinks(): Array<any>;
-    addLink(link: any): any;
-    removeLink(link: any): any;
 }

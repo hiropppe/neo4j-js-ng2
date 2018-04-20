@@ -13,6 +13,7 @@ export class Node implements NodeInterface
     TYPE?: string;
     props: any = {};
     links: Array<any> = [];
+    dispLinks: Array<any> = [];
     x?: number;
     y?: number;
     fixed?: boolean;
@@ -188,27 +189,5 @@ export class Node implements NodeInterface
     getCoords()
     {
         return [this.x, this.y]
-    }
-
-    getLinks()
-    {
-        return this.links;
-    }
-
-    addLink(link: any)
-    {
-        this.links.push(link)
-        return this;
-    }
-
-    removeLink(link: any)
-    {
-        const index = this.links.indexOf(link);
-
-        if (this.links.indexOf(link) > -1) {
-            this.links.splice(index, 1);
-        }
-
-        return this;
     }
 }

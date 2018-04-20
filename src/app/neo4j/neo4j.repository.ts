@@ -192,6 +192,51 @@ export class Neo4jRepository
 
     }
 
+    findRelationshipsByID(nodeId: number, linkId: number)
+    {
+        const transaction = new Transaction()
+        transaction.add(`MATCH (a)-[r]->(b) WHERE ID(a) = ${nodeId} AND ID(r) = ${linkId} RETURN a, b, ID(a), ID(b), LABELS(a), LABELS(b), r, ID(r), TYPE(r)`)
+
+        return new Promise((resolve, reject) => {
+            this.neo4j.commit(transaction).then((resultSets: Array<ResultSet>) => {
+
+                 // "r" dataset (relationship nodes) should match number of "b" nodes...)
+                 // @todo ...what happens with multiple relationships then?
+                let dataset1 = resultSets[0].getDataset('a')
+                let dataset2 = resultSets[0].getDataset('r')
+                let dataset3 = resultSets[0].getDataset('b')
+
+                let links = [];
+
+                dataset2.forEach((rel: NodeInterface, i) => {
+                    const sourceNode = dataset1[i]
+                    const targetNode = dataset3[i]
+
+                    // direction always stays the same
+                    links.push(new Link({ source: sourceNode, target: targetNode, relationship: dataset2[i] }))
+                })
+
+                dataset3.forEach((node: NodeInterface) => {
+                    this.execute(`MATCH (a)-[r]->() WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r)`).then((linkResultSet: Array<ResultSet>) => {
+                        console.log(linkResultSet)
+                        let edges = linkResultSet[0].getDataset('r')
+                        edges.forEach((edge: Node) => {
+                            console.log(edge)
+                            node.links.push({'ID': edge.ID, 'TYPE': edge.TYPE})
+                        })
+                    })
+                })
+
+                resolve(links)
+
+            }).catch(err => {
+                reject(err)
+            })
+
+        })
+
+    }
+
     updateRelationshipById(id: number, type: string|String, changedType: string|String = null, changedProperties: any, removedProperties: any)
     {
         const transaction01 = new Transaction()
@@ -247,7 +292,6 @@ export class Neo4jRepository
     {
         const transaction = new Transaction()
         transaction.add(queryString)
-
         return this.neo4j.commit(transaction)
     }
 }

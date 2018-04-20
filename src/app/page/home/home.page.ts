@@ -1,6 +1,6 @@
 import { Component, ViewChild }     from '@angular/core';
 import { OnInit, AfterViewInit }    from '@angular/core';
-import { GraphComponent }           from '../../component';
+import { GraphComponent, LinkSelectComponent }           from '../../component';
 import { SettingsService }          from '../../service';
 import { Neo4jRepository }          from '../../neo4j';
 import { ResultSet, Transaction }   from '../../neo4j/orm';
@@ -102,16 +102,18 @@ export class HomePageComponent implements OnInit, AfterViewInit
 
             let links = [];
             let dataset1 = resultSets[0].getDataset('a')
-            let dataset2 = resultSets[0].getDataset('r')
-            let dataset3 = resultSets[0].getDataset('b')
-
-            dataset2.forEach((rel: NodeInterface, i) => {
-               links.push({ source: dataset3[i], target: dataset1[i], relationship: dataset2[i] });
-            })
 
             this.graph.addNodes(dataset1)
-            this.graph.addNodes(dataset3)
-            this.graph.addLinks(links)
+
+            dataset1.forEach((node: NodeInterface) => {
+                this.repo.execute(`MATCH (a)-[r]->() WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r)`).then((relResult: Array<ResultSet>) => {
+                    let edge = relResult[0].getDataset('r')
+                    edge.forEach((rel: Node) => {
+                        node.links.push({'ID': rel.ID, 'TYPE': rel.TYPE})
+                    })
+                })
+            })
+
             this.graph.update()
 
         }).catch(err => {
@@ -157,18 +159,10 @@ export class HomePageComponent implements OnInit, AfterViewInit
 
     onNodeDoubleClicked(node: NodeInterface)
     {
-        this.findRelationships(node)
-    }
-
-    onNodeDoubleClicked2(node: NodeInterface)
-    {
-        this.getRelationships(node).then(() => {
-            this.selectedLink = null
-            this.selectedNode = node
-            this.expandLinks = true
-        }).catch(err => {
-            this.toastError(err)
-        })
+//        this.findRelationships(node)
+        this.selectedLink = null
+        this.selectedNode = node
+        this.expandLinks = true
     }
 
     onNodeAdded(node: NodeInterface)
@@ -194,6 +188,31 @@ export class HomePageComponent implements OnInit, AfterViewInit
                 this.saveSuccessText = 'Node saved';
             }
         }
+    }
+
+    onLinkExpanded(node: NodeInterface)
+    {
+        let dispIDs = []
+        // query relationships in both ways
+        node.dispLinks.forEach((link: any) => {
+            this.repo.findRelationshipsByID(node.ID, link['ID']).then((links: Array<LinkInterface>) => {
+
+                links.forEach((link: LinkInterface, i) => {
+                    this.graph.addNode(link.target)
+                    this.graph.addLink(link)
+                })
+
+            }).catch(err => {
+                this.toastError(err)
+            })
+            dispIDs.push(link['ID'])
+        })
+
+        node.links.forEach((link: any) => {
+            if (dispIDs.indexOf(link['ID']) === -1) {
+                this.graph.removeLinkById(link['ID'])
+            }
+        });
     }
 
     /**
@@ -234,34 +253,6 @@ export class HomePageComponent implements OnInit, AfterViewInit
         this.selectedNode = null;
         // then safely reset create mode variable
         this.createModeEnabled = e;
-    }
-
-    private getRelationships(sourceNode: NodeInterface)
-    {
-        return new Promise((resolve, reject) => {
-            // query relationships in both ways
-            this.repo.findRelationships(sourceNode, '->').then((links: Array<LinkInterface>) => {
-
-                links.forEach((link: LinkInterface, i) => {
-                    this.selectedNode.addLink([link.relationship.ID, link.relationship.TYPE])
-                })
-
-            }).catch(err => {
-                this.toastError(err)
-            })
-
-            this.repo.findRelationships(sourceNode, '<-').then((links: Array<LinkInterface>) => {
-
-                links.forEach((link: LinkInterface, i) => {
-                    this.selectedNode.addLink([link.relationship.ID, link.relationship.TYPE])
-                })
-
-            }).catch(err => {
-                this.toastError(err)
-            })
-
-            resolve(this.selectedNode)
-        })
     }
 
     private findRelationships(sourceNode: NodeInterface)
