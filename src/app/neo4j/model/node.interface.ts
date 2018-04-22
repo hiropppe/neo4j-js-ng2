@@ -6,8 +6,9 @@ export interface NodeInterface {
     META: any;
     TYPE?: string;
     props: any;
-    links: Array<any>;
-    dispLinks: Array<any>;
+    links: Array<NodeInterface>;
+    targets: Array<NodeInterface>;
+    dispLinks: Array<number>;
     fixed?: boolean;
     deleted?: boolean;
     x?: number;

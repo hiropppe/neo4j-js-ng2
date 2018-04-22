@@ -16,6 +16,7 @@ import { diff }                                 from '../../core/array';
 export class LinkSelectComponent implements OnInit
 {
     @Input('node') node: NodeInterface = null;
+    @Output('onNodeChanged') onNodeChanged: EventEmitter<Node> = new EventEmitter()
     @Output('onLinkExpanded') onLinkExpanded: EventEmitter<Node> = new EventEmitter()
 
     links = [];
@@ -41,18 +42,12 @@ export class LinkSelectComponent implements OnInit
 
     ngOnChanges(changes: SimpleChanges)
     {
+        let node = changes.node.currentValue
+
         this.links = []
         this.selectedLinks = []
-        if (null !== changes.node.currentValue) {
-            // always copy node properties to properties for the view whenever its not null
-            // also update all labels (available and node labels)
-            changes.node.currentValue.links.forEach((link: any) => {
-                this.links.push({'id': link['ID'], 'itemName': link['TYPE']})
-            })
-            changes.node.currentValue.dispLinks.forEach((link: any) => {
-                this.selectedLinks.push({'id': link['ID'], 'itemName': link['TYPE']})
-            })
-        }
+
+        this.onNodeChanged.emit(node)
     }
 
     onItemSelect(link: any) {
@@ -71,8 +66,12 @@ export class LinkSelectComponent implements OnInit
 
     }
 
-    addItem(link: any) {
-        this.links.push(link)
+    addItem(link: NodeInterface, target: NodeInterface) {
+        this.links.push({'id': link.ID, 'itemName': link.TYPE + '->' + target.props['name']})
+
+        if (this.node.dispLinks.indexOf(link.ID) !== -1) {
+            this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + '->' + target.props['name']})
+        }
     }
 
     expand(e?: any)
@@ -81,7 +80,7 @@ export class LinkSelectComponent implements OnInit
 
         this.node.dispLinks = []
         this.selectedLinks.forEach((link: any) => {
-            this.node.dispLinks.push({'ID': link['id'], 'TYPE': link['itemName']})
+            this.node.dispLinks.push(link['id'])
         })
         this.onLinkExpanded.emit(this.node)
     }

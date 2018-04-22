@@ -11,6 +11,7 @@ import { Link, LinkInterface }                      from '../../neo4j/model';
 import { Finder, Mouse, State, Shape }              from './graph-utils';
 import { distance }                                 from './graph-utils';
 import { distinct, crosscut }                       from '../../core/array';
+import { and } from '@angular/router/src/utils/collection';
 
 @Component({
     selector: 'graph-component',
@@ -383,6 +384,14 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges
     {
         let source = Finder.in(this.nodes).findById(link.source.getId())
         let target = Finder.findById(link.target.getId())
+
+        for (let i in this.links) {
+            if (this.links[i].source.ID === source.ID &&
+                this.links[i].target.ID === target.ID &&
+                this.links[i].relationship.ID === link.relationship.ID) {
+                return;
+            }
+        }
 
         this.links.push({
             source: source,

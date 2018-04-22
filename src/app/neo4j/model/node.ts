@@ -12,8 +12,9 @@ export class Node implements NodeInterface
     META: any;
     TYPE?: string;
     props: any = {};
-    links: Array<any> = [];
-    dispLinks: Array<any> = [];
+    links: Array<NodeInterface> = [];
+    targets: Array<NodeInterface> = [];
+    dispLinks: Array<number> = [];
     x?: number;
     y?: number;
     fixed?: boolean;

@@ -28,6 +28,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
         relationshipType: 'MY_REL'
     }
     @ViewChild(GraphComponent) graph: GraphComponent;
+    @ViewChild(LinkSelectComponent) linkSelect: LinkSelectComponent;
 
     saveErrorText: string = null;
     saveSuccessText: string = null;
@@ -104,7 +105,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
             let dataset1 = resultSets[0].getDataset('a')
 
             this.graph.addNodes(dataset1)
-
+            /*
             dataset1.forEach((node: NodeInterface) => {
                 this.repo.execute(`MATCH (a)-[r]->() WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r)`).then((relResult: Array<ResultSet>) => {
                     let edge = relResult[0].getDataset('r')
@@ -113,7 +114,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
                     })
                 })
             })
-
+            */
             this.graph.update()
 
         }).catch(err => {
@@ -143,9 +144,10 @@ export class HomePageComponent implements OnInit, AfterViewInit
 
     onNodeSelected(node: NodeInterface)
     {
+//        this.findRelationships(node)
         this.selectedLink = null
         this.selectedNode = node
-        this.expandLinks = false
+        this.expandLinks = true
     }
 
     onLinkSelected(g: any)
@@ -159,10 +161,9 @@ export class HomePageComponent implements OnInit, AfterViewInit
 
     onNodeDoubleClicked(node: NodeInterface)
     {
-//        this.findRelationships(node)
         this.selectedLink = null
         this.selectedNode = node
-        this.expandLinks = true
+        this.expandLinks = false
     }
 
     onNodeAdded(node: NodeInterface)
@@ -190,29 +191,35 @@ export class HomePageComponent implements OnInit, AfterViewInit
         }
     }
 
+    onNodeChanged(node: NodeInterface)
+    {
+        node.loading = true
+        node.links = []
+        this.repo.execute(`MATCH (a)-[r]->(b) WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r), b, ID(b), LABELS(b)`).then((resultSet: Array<ResultSet>) => {
+            let links = resultSet[0].getDataset('r')
+            let targets = resultSet[0].getDataset('b')
+            for (let i=0; i<links.length; i++) {
+                node.links.push(links[i])
+                node.targets.push(targets[i])
+                this.linkSelect.addItem(links[i], targets[i])
+            }
+            node.loading = false
+        })
+    }
+
     onLinkExpanded(node: NodeInterface)
     {
-        let dispIDs = []
-        // query relationships in both ways
-        node.dispLinks.forEach((link: any) => {
-            this.repo.findRelationshipsByID(node.ID, link['ID']).then((links: Array<LinkInterface>) => {
-
-                links.forEach((link: LinkInterface, i) => {
-                    this.graph.addNode(link.target)
-                    this.graph.addLink(link)
-                })
-
-            }).catch(err => {
-                this.toastError(err)
-            })
-            dispIDs.push(link['ID'])
-        })
-
-        node.links.forEach((link: any) => {
-            if (dispIDs.indexOf(link['ID']) === -1) {
-                this.graph.removeLinkById(link['ID'])
+        for(let i=0; i<node.links.length; i++) {
+            if (node.dispLinks.indexOf(node.links[i].ID) === -1) {
+                this.graph.removeLinkById(node.links[i].ID, false)
+                this.graph.removeNode(node.targets[i], false)
+            } else {
+                this.graph.addNode(node.targets[i], false)
+                this.graph.addLink(new Link({source: node, target: node.targets[i], relationship:node.links[i]}), false)
             }
-        });
+        }
+
+        this.graph.update()
     }
 
     /**
