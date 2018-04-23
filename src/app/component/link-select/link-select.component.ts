@@ -67,10 +67,23 @@ export class LinkSelectComponent implements OnInit
     }
 
     addItem(link: NodeInterface, target: NodeInterface) {
-        this.links.push({'id': link.ID, 'itemName': link.TYPE + '->' + target.props['name']})
+        let targetLabel = null
+        if (target.props['label']) {
+            targetLabel = target.props['label']
+        } else if (target.props['name']) {
+            targetLabel = target.props['name']
+        } else if (target.props['value']) {
+            targetLabel = target.props['value']
+        } else {
+            // more relations
+        }
 
-        if (this.node.dispLinks.indexOf(link.ID) !== -1) {
-            this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + '->' + target.props['name']})
+        if (targetLabel !== null) {
+            this.links.push({'id': link.ID, 'itemName': link.TYPE + '->' + targetLabel})
+
+            if (this.node.dispLinks.indexOf(link.ID) !== -1) {
+                this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + '->' + targetLabel})
+            }
         }
     }
 
