@@ -16,5 +16,8 @@
 
 <div *ngIf="(null !== node)" flex flex-rows class="charcoal" flex-space-between>
     <app-button (click)="expand($event)" [loading]="loading" primary>Expand</app-button>
+    <app-button (click)="hide($event)" [loading]="loading" primary>Hide</app-button>
+    <!--
     <app-button (click)="cancel($event)" danger [disabled]="(!cancelable)">Cancel</app-button>
+    -->
 </div>

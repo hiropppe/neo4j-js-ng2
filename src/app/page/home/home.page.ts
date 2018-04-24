@@ -221,6 +221,11 @@ export class HomePageComponent implements OnInit, AfterViewInit
         this.graph.update()
     }
 
+    onNodeHid(node: NodeInterface)
+    {
+        this.graph.removeNode(node, true)
+    }
+
     /**
      * @param e { link: NodeInterface, previousLink: NodeInterface }
      */

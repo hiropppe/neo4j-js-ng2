@@ -43,6 +43,7 @@
             <link-select
                 *ngIf="(null !== selectedNode && true == expandLinks)"
                 [node]="selectedNode"
+                (onNodeHid)="onNodeHid($event)"
                 (onLinkExpanded)="onLinkExpanded($event)"
                 (onNodeChanged)="onNodeChanged($event)">
             </link-select>

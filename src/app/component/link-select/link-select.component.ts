@@ -18,6 +18,7 @@ export class LinkSelectComponent implements OnInit
     @Input('node') node: NodeInterface = null;
     @Output('onNodeChanged') onNodeChanged: EventEmitter<Node> = new EventEmitter()
     @Output('onLinkExpanded') onLinkExpanded: EventEmitter<Node> = new EventEmitter()
+    @Output('onNodeHid') onNodeHid: EventEmitter<Node> = new EventEmitter()
 
     links = [];
     selectedLinks = [];
@@ -96,6 +97,13 @@ export class LinkSelectComponent implements OnInit
             this.node.dispLinks.push(link['id'])
         })
         this.onLinkExpanded.emit(this.node)
+    }
+
+    hide(e?: any)
+    {
+        if (e) { e.preventDefault() }
+
+        this.onNodeHid.emit(this.node)
     }
 
     cancel(e?: any)
