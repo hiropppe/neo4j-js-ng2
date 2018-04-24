@@ -12,6 +12,7 @@ import { KeysPipe }             from './core/pipe';
 import { EntriesPipe }          from './core/pipe';
 import { NiceDate }             from './core/pipe';
 import { SettingsService }      from './service';
+import { WikidataService }      from './service';
 
 import { Neo4jService }         from './neo4j';
 import { Neo4jRepository }      from './neo4j';
@@ -82,6 +83,7 @@ import { AngularMultiSelectModule }     from 'angular2-multiselect-dropdown/angu
         SettingsService,
         Neo4jService,
         Neo4jRepository,
+        WikidataService,
     ],
     bootstrap: [
         AppComponent

@@ -3,6 +3,7 @@ import { Input, Output, EventEmitter }          from '@angular/core';
 import { ViewChildren, QueryList, ContentChildren } from '@angular/core';
 import { SimpleChanges }                        from '@angular/core';
 import { SettingsService }                      from '../../service';
+import { WikidataService }                      from '../../service';
 import { Neo4jRepository }                      from '../../neo4j';
 import { ResultSet, CypherQuery, Transaction }  from '../../neo4j/orm';
 import { Node, NodeInterface, LinkInterface }                  from '../../neo4j/model';
@@ -27,7 +28,7 @@ export class LinkSelectComponent implements OnInit
     loading: boolean = false;
     cancelable: boolean = false;
 
-    constructor(private settingsService: SettingsService, private repo: Neo4jRepository)
+    constructor(private wikidataService:  WikidataService)
     {
 
     }
@@ -80,10 +81,19 @@ export class LinkSelectComponent implements OnInit
         }
 
         if (targetLabel !== null) {
-            this.links.push({'id': link.ID, 'itemName': link.TYPE + '->' + targetLabel})
+            let propTitle = this.wikidataService.getPropTitle(link.TYPE)
+            if (null !== propTitle) {
+                this.links.push({'id': link.ID, 'itemName': propTitle + ' -> ' + targetLabel})
+            } else {
+                this.links.push({'id': link.ID, 'itemName': link.TYPE + ' -> ' + targetLabel})
+            }
 
             if (this.node.dispLinks.indexOf(link.ID) !== -1) {
-                this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + '->' + targetLabel})
+                if (null !== propTitle) {
+                    this.selectedLinks.push({'id': link.ID, 'itemName': propTitle + ' -> ' + targetLabel})
+                } else {
+                    this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + ' -> ' + targetLabel})
+                }
             }
         }
     }
