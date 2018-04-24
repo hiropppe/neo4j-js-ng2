@@ -212,7 +212,6 @@ export class HomePageComponent implements OnInit, AfterViewInit
         for(let i=0; i<node.links.length; i++) {
             if (node.dispLinks.indexOf(node.links[i].ID) === -1) {
                 this.graph.removeLinkById(node.links[i].ID, false)
-                this.graph.removeNode(node.targets[i], false)
             } else {
                 this.graph.addNode(node.targets[i], false)
                 this.graph.addLink(new Link({source: node, target: node.targets[i], relationship:node.links[i]}), false)
