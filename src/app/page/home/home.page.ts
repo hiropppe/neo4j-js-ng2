@@ -105,16 +105,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
             let dataset1 = resultSets[0].getDataset('a')
 
             this.graph.addNodes(dataset1)
-            /*
-            dataset1.forEach((node: NodeInterface) => {
-                this.repo.execute(`MATCH (a)-[r]->() WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r)`).then((relResult: Array<ResultSet>) => {
-                    let edge = relResult[0].getDataset('r')
-                    edge.forEach((rel: Node) => {
-                        node.links.push({'ID': rel.ID, 'TYPE': rel.TYPE})
-                    })
-                })
-            })
-            */
+
             this.graph.update()
 
         }).catch(err => {
