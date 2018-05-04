@@ -20,13 +20,13 @@ export class LinkSelectComponent implements OnInit
     @Output('onNodeChanged') onNodeChanged: EventEmitter<Node> = new EventEmitter()
     @Output('onLinkExpanded') onLinkExpanded: EventEmitter<Node> = new EventEmitter()
     @Output('onNodeHid') onNodeHid: EventEmitter<Node> = new EventEmitter()
+    @Output('onDismiss') onDismiss: EventEmitter<any> = new EventEmitter();
 
     links = [];
     selectedLinks = [];
     settings = {};
 
-    loading: boolean = false;
-    cancelable: boolean = false;
+    private properties: Array<[string, any]> = [];
 
     constructor(private wikidataService:  WikidataService)
     {
@@ -38,13 +38,23 @@ export class LinkSelectComponent implements OnInit
             text: "Select Relationships",
             selectAllText: 'Select All',
             unSelectAllText: 'UnSelect All',
-            classes: "custom-class-example"
+            classes: "custom-class-example",
+            enableSearchFilter: true
         };
     }
 
     ngOnChanges(changes: SimpleChanges)
     {
         let node = changes.node.currentValue
+
+        if (null !== node) {
+            // always copy node properties to properties for the view whenever its not null
+            // also update all labels (available and node labels)
+            this.properties = this.node.propertiesAsArray()
+
+        } else {
+            this.properties = [];
+        }
 
         this.links = []
         this.selectedLinks = []
@@ -68,7 +78,7 @@ export class LinkSelectComponent implements OnInit
 
     }
 
-    addItem(link: NodeInterface, target: NodeInterface) {
+    addLink(link: NodeInterface, target: NodeInterface, direction: number) {
         let targetLabel = null
         if (target.props['label']) {
             targetLabel = target.props['label']
@@ -80,22 +90,36 @@ export class LinkSelectComponent implements OnInit
             // more relations
         }
 
+        let arrow = null
+        if (direction === 1) {
+            arrow = ' -> '
+        } else {
+            arrow = ' <- '
+        }
+
         if (targetLabel !== null) {
             let propTitle = this.wikidataService.getPropTitle(link.TYPE)
             if (null !== propTitle) {
-                this.links.push({'id': link.ID, 'itemName': propTitle + ' -> ' + targetLabel})
+                this.links.push({'id': link.ID, 'itemName': propTitle + arrow + targetLabel})
             } else {
-                this.links.push({'id': link.ID, 'itemName': link.TYPE + ' -> ' + targetLabel})
+                this.links.push({'id': link.ID, 'itemName': link.TYPE + arrow + targetLabel})
             }
 
             if (this.node.dispLinks.indexOf(link.ID) !== -1) {
                 if (null !== propTitle) {
-                    this.selectedLinks.push({'id': link.ID, 'itemName': propTitle + ' -> ' + targetLabel})
+                    this.selectedLinks.push({'id': link.ID, 'itemName': propTitle + arrow + targetLabel})
                 } else {
-                    this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + ' -> ' + targetLabel})
+                    this.selectedLinks.push({'id': link.ID, 'itemName': link.TYPE + arrow + targetLabel})
                 }
             }
         }
+    }
+
+    dismiss(e: any)
+    {
+        if (e) { e.preventDefault() }
+
+        this.onDismiss.emit()
     }
 
     expand(e?: any)
@@ -120,7 +144,7 @@ export class LinkSelectComponent implements OnInit
     {
         if (e) { e.preventDefault() }
 
-        this.cancelable = false;
+        this.onDismiss.emit()
     }
 
     private gracefulId(node: NodeInterface)

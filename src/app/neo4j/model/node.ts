@@ -15,6 +15,7 @@ export class Node implements NodeInterface
     links: Array<NodeInterface> = [];
     targets: Array<NodeInterface> = [];
     dispLinks: Array<number> = [];
+    linkDirections: Array<number> = [];
     x?: number;
     y?: number;
     fixed?: boolean;

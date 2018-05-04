@@ -1,23 +1,47 @@
-<div flex flex-fill *ngIf="(null !== node)">
-    <div flex flex-columns>
-        <div flex flex-rows class="emarged-bottom">
-            <span flex class="gray">Relationships</span>
+<div class="node-detail-overlay"></div>
+
+<div flex flex-columns class="node-detail-content">
+        <div flex flex-rows flex-align-center class="header">
+            <h2 flex class="tuto-title center">Node Details</h2>
+
+            <a flex pull-right href="" title="Neo4j settings" (click)="dismiss($event)">
+                <i class="flaticon-cancel" style="font-size: 13px"></i>
+            </a>
         </div>
-        <angular2-multiselect [data]="links" 
-            [(ngModel)]="selectedLinks" 
-            [settings]="settings" 
-            (onSelect)="onItemSelect($event)"
-            (onDeSelect)="OnItemDeSelect($event)" 
-            (onSelectAll)="onSelectAll($event)" 
-            (onDeSelectAll)="onDeSelectAll($event)">
-        </angular2-multiselect>
-    </div>
+
+        <div flex flex-columns flex-fill *ngIf="(null !== node)" class="sub-content">
+
+            <div flex flex-rows class="emarged-bottom">
+                <span flex class="gray">Properties</span>
+            </div>
+    
+            <div flex flex-rows *ngFor="let row of properties; let i = index" class="emarged-bottom">
+                <span class="i-col1" [innerText]="row[0]"></span>
+                <span class="i-col2" [innerText]="row[1]"></span>
+            </div>
+
+            <div flex flex-columns flex-fill>
+                <div flex flex-rows class="emarged-bottom">
+                    <span flex class="gray">Outlinks</span>
+                </div>
+                <angular2-multiselect [data]="links" 
+                    [(ngModel)]="selectedLinks" 
+                    [settings]="settings" 
+                    (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event)" 
+                    (onSelectAll)="onSelectAll($event)" 
+                    (onDeSelectAll)="onDeSelectAll($event)">
+                </angular2-multiselect>
+            </div>
+
+            <div flex flex-rows flex-space-between *ngIf="(null !== node)">
+                    <app-button (click)="expand($event)" [loading]="loading" primary>Expand</app-button>
+                    <!--
+                    <app-button (click)="hide($event)" [loading]="loading" primary>Hide</app-button>
+                    <app-button (click)="cancel($event)" danger [disabled]="(!cancelable)">Cancel</app-button>
+                    -->
+            </div>    
+        </div>
 </div>
 
-<div *ngIf="(null !== node)" flex flex-rows class="charcoal" flex-space-between>
-    <app-button (click)="expand($event)" [loading]="loading" primary>Expand</app-button>
-    <app-button (click)="hide($event)" [loading]="loading" primary>Hide</app-button>
-    <!--
-    <app-button (click)="cancel($event)" danger [disabled]="(!cancelable)">Cancel</app-button>
-    -->
-</div>
+

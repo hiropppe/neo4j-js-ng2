@@ -40,13 +40,6 @@
                 [link]="selectedLink"
                 (onLinkEdited)="onLinkEdited($event)">
             </link-edit>
-            <link-select
-                *ngIf="(null !== selectedNode && true == expandLinks)"
-                [node]="selectedNode"
-                (onNodeHid)="onNodeHid($event)"
-                (onLinkExpanded)="onLinkExpanded($event)"
-                (onNodeChanged)="onNodeChanged($event)">
-            </link-select>
         </div>
 
     </div>
@@ -91,3 +84,12 @@
     </div>
 
 </div>
+
+<link-select
+    *ngIf="(null !== selectedNode && true == expandLinks)"
+    [node]="selectedNode"
+    (onNodeHid)="onNodeHid($event)"
+    (onLinkExpanded)="onLinkExpanded($event)"
+    (onNodeChanged)="onNodeChanged($event)"
+    (onDismiss)="dismissNodeDetail()">
+</link-select>

@@ -192,7 +192,19 @@ export class HomePageComponent implements OnInit, AfterViewInit
             for (let i=0; i<links.length; i++) {
                 node.links.push(links[i])
                 node.targets.push(targets[i])
-                this.linkSelect.addItem(links[i], targets[i])
+                node.linkDirections.push(1)
+                this.linkSelect.addLink(links[i], targets[i], 1)
+            }
+            node.loading = false
+        })
+        this.repo.execute(`MATCH (a)<-[r]-(b) WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r), b, ID(b), LABELS(b)`).then((resultSet: Array<ResultSet>) => {
+            let links = resultSet[0].getDataset('r')
+            let targets = resultSet[0].getDataset('b')
+            for (let i=0; i<links.length; i++) {
+                node.links.push(links[i])
+                node.targets.push(targets[i])
+                node.linkDirections.push(2)
+                this.linkSelect.addLink(links[i], targets[i], 2)
             }
             node.loading = false
         })
@@ -205,11 +217,26 @@ export class HomePageComponent implements OnInit, AfterViewInit
                 this.graph.removeLinkById(node.links[i].ID, false)
             } else {
                 this.graph.addNode(node.targets[i], false)
-                this.graph.addLink(new Link({source: node, target: node.targets[i], relationship:node.links[i]}), false)
+                if (node.linkDirections[i] === 1) {
+                    this.graph.addLink(new Link({source: node, target: node.targets[i], relationship:node.links[i]}), false)
+                } else {
+                    this.graph.addLink(new Link({source: node.targets[i], target: node, relationship:node.links[i]}), false)
+                }
             }
         }
 
+        this.selectedLink = null
+        this.selectedNode = null
+        this.expandLinks = false
+
         this.graph.update()
+    }
+
+    dismissNodeDetail()
+    {
+        this.selectedLink = null
+        this.selectedNode = null
+        this.expandLinks = false
     }
 
     onNodeHid(node: NodeInterface)

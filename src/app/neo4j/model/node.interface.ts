@@ -9,6 +9,7 @@ export interface NodeInterface {
     links: Array<NodeInterface>;
     targets: Array<NodeInterface>;
     dispLinks: Array<number>;
+    linkDirections: Array<number>;
     fixed?: boolean;
     deleted?: boolean;
     x?: number;

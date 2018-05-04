@@ -1,32 +1,78 @@
 @import "../../../theme/shared/_mixins";
 @import "../../../theme/shared/_variables";
 
-:host {
-    @include hostSupportsFullHeight()
+.node-detail-overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: colors(charcoal);
+    opacity: 0.9;
+    z-index: 9;
 }
 
-.label {
-    color: colors(white);
+.node-detail-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 90%;
+    transform: translate(-50%, -50%);
+    max-width: 650px;
+    background-color: colors(coal);
+    z-index: 10;
+
+    h2.tuto-title {
+        font-size: $fontSize + 2px;
+        margin: 0px;
+        font-weight: 200;
+        text-align: center;
+    }
+
+    .header {
+        padding: 16px 24px;
+        border-bottom: 1px solid colors(charcoal);
+
+        .flaticon-cancel:before {
+            font-size: 15px;
+        }
+    }
+
+    .sub-content {
+        padding: 24px 45px 24px 32px;
+    }
+}
+
+.i-col1 {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 2px 4px;
-    background-color: #b533b7;
-    @include border-radius(1px);
+    margin-right: 8px;
+    flex-basis: 20%;
+}
+.i-col2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 8px;
 }
 
 .custom-class-example {
     color: #ccc;
 }
 
-.custom-class-example .c-token{
+:host /deep/ .custom-class-example .c-token{
     background: #38d574 !important;
 }
 
-.custom-class-example .pure-checkbox label::before {
+:host /deep/ .custom-class-example .pure-checkbox label::before {
     border-color: #38d574 !important;
 }
 
-.custom-class-example .pure-checkbox input[type="checkbox"]:checked + label[_ngcontent-c1]:before {
+:host /deep/ .custom-class-example .pure-checkbox input[type="checkbox"]:checked + label[_ngcontent-c12]:before {
     background: #38d574 !important;
 }
