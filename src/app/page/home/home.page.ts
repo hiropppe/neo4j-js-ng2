@@ -197,6 +197,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
             }
             node.loading = false
         })
+        /*
         this.repo.execute(`MATCH (a)<-[r]-(b) WHERE ID(a) = ${node.ID} RETURN r, ID(r), TYPE(r), b, ID(b), LABELS(b)`).then((resultSet: Array<ResultSet>) => {
             let links = resultSet[0].getDataset('r')
             let targets = resultSet[0].getDataset('b')
@@ -208,6 +209,7 @@ export class HomePageComponent implements OnInit, AfterViewInit
             }
             node.loading = false
         })
+        */
     }
 
     onLinkExpanded(node: NodeInterface)
