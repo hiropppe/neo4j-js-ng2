@@ -9,24 +9,18 @@
     "graph": {
         "nodes": {
             "primaryKey": "ID",
-            "displayNameOptions": ["name", "label", "id"],
+            "displayNameOptions": ["label", "id"],
             "displayColorOptions": {
-                "Ad": "#6DCE9E",
-                "Person": "#343434",
-                "Specialty": "#11b7ad",
-                "Client": "#6DCE9E",
-                "Company": "#1e6f98",
-                "Officer": "#e8cb3b",
-                "Test": "#11b7ad"
+                "Entity": "#11b7ad"
             }
         },
         "links": {
-            "displayNameOptions": ["name", "TYPE"],
+            "displayNameOptions": ["TYPE"],
             "displayColorOptions": {
 
             }
         },
-        "labels": ["Test1", "Test2", "Document", "Officer", "Company"]
+        "labels": ["Entity", "item"]
     },
     "debug": true
 }
