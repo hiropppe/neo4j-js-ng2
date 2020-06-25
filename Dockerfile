@@ -33,7 +33,7 @@ RUN n --version
 
 WORKDIR /root
 
-RUN git clone http://192.168.88.180:18080/gitbucket/git/RD/neo4j-js-ng2.git && \
+RUN git clone https://github.com/hiropppe/neo4j-js-ng2.git && \
     cd neo4j-js-ng2 && \
     git checkout kgedit && \
     npm install
