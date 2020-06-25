@@ -1,7 +1,6 @@
 {
     "client": {
-        "apiEndpoint": "http://192.168.88.84:27474/db/data",
-        "authBasic": "Basic bmVvNGo6dGFrZTRq"
+        "apiEndpoint": "http://192.168.88.156:7474/db/data"
     },
     "hotkeys": {
         "toggleCreateMode": ["CTRL", "x"]
